@@ -8,33 +8,76 @@ class SecondChallenge extends StatefulWidget {
 }
 
 class _SecondChallengeState extends State<SecondChallenge>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+    with TickerProviderStateMixin {
+  late AnimationController _whiteTileController;
+
+  late AnimationController _blackTileController;
   late List<Animation<double>> _animations;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      duration: const Duration(seconds: 103),
+    _whiteTileController = AnimationController(
+      duration: const Duration(seconds: 3),
       vsync: this,
-    )..repeat();
+    );
 
+    _blackTileController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+
+    _whiteTileController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _whiteTileController.reset();
+        _blackTileController.forward();
+      }
+    });
+
+    _blackTileController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _blackTileController.reset();
+        _whiteTileController.forward();
+      }
+    });
+
+    _whiteTileController.forward();
+
+// _animations 초기화 부분
     _animations = List.generate(64, (i) {
-      double start = i * 0.1 / 32;
-      double end = start + 0.1; // Reduce duration for each tile
-      return Tween<double>(begin: 0, end: 1).animate(
-        CurvedAnimation(
-          parent: _controller,
-          curve: Interval(start, end, curve: Curves.linear),
-        ),
-      );
+      int row = i ~/ 8;
+      int col = i % 8;
+      bool isWhite = isWhiteTile(row, col);
+
+      double start;
+      double end;
+      if (isWhite) {
+        int whiteIndex = (row * 8 + col - (row ~/ 2)); // 흰색 타일의 순번 계산
+        start = whiteIndex * 0.1 / 36;
+        end = start + 2.4 / 32;
+        return Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+            parent: _whiteTileController,
+            curve: Interval(start, end, curve: Curves.easeOut),
+          ),
+        );
+      } else {
+        int blackIndex = (row * 8 + col - (row ~/ 2)); // 검정색 타일의 순번 계산
+        start = blackIndex * 0.1 / 36;
+        end = start + 2.4 / 32;
+        return Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+            parent: _blackTileController,
+            curve: Interval(start, end, curve: Curves.easeOut),
+          ),
+        );
+      }
     });
   }
 
   bool isWhiteTile(int row, int col) {
-    return (row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1);
+    return (row % 2 == 0 && col % 2 == 0) || (row % 2 == 1 && col % 2 == 1);
   }
 
   @override
@@ -59,27 +102,24 @@ class _SecondChallengeState extends State<SecondChallenge>
               ),
               // Top Animated Tile
               AnimatedBuilder(
-                animation: _controller,
+                animation:
+                    isWhite ? _whiteTileController : _blackTileController,
                 builder: (context, child) {
-                  if ((isWhite &&
-                          _animations[row * 4 + col ~/ 2].value <= 0.5) ||
-                      (!isWhite &&
-                          _animations[row * 4 + col ~/ 2].value < 0.75)) {
-                    return Container(
-                        color: isWhite
-                            ? const Color(0xFFDCDCCD)
-                            : const Color(0xFF262626));
+                  if (isWhite) {
+                    return Transform.rotate(
+                      angle: 0.5 * 3.14 * _animations[index].value,
+                      child: Container(
+                        color: const Color(0xFFDCDCCD),
+                      ),
+                    );
+                  } else {
+                    return Transform.rotate(
+                      angle: 0.5 * 3.14 * _animations[index].value,
+                      child: Container(
+                        color: const Color(0xFF262626),
+                      ),
+                    );
                   }
-                  return Transform.rotate(
-                    angle: 2 *
-                        3.14 *
-                        (_animations[row * 4 + col ~/ 2].value % 0.25) *
-                        4,
-                    child: Container(
-                        color: isWhite
-                            ? const Color(0xFFDCDCCD)
-                            : const Color(0xFF262626)),
-                  );
                 },
               ),
             ],
@@ -92,7 +132,8 @@ class _SecondChallengeState extends State<SecondChallenge>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _whiteTileController.dispose();
+    _blackTileController.dispose();
     super.dispose();
   }
 }
