@@ -1,5 +1,6 @@
 import 'package:ani_challenge/screens/first_challenge.dart';
 import 'package:ani_challenge/screens/first_challenge_starting.dart';
+import 'package:ani_challenge/screens/second_challenge.dart';
 import 'package:flutter/material.dart';
 
 import 'first_challenge_refactor.dart';
@@ -52,6 +53,15 @@ class MenuScreen extends StatelessWidget {
                 );
               },
               child: const Text('First Challenge(Refactor)'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _goToPage(
+                  context,
+                  const SecondChallenge(),
+                );
+              },
+              child: const Text('Second Challenge'),
             ),
           ],
         ),

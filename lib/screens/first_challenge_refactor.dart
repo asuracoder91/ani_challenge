@@ -29,11 +29,11 @@ class _FirstChallengeRefactorState extends State<FirstChallengeRefactor> {
     super.initState();
 
     durations = List.generate(
-        100, (i) => Duration(milliseconds: random.nextInt(800) + 500));
-    beginTranslations = List.generate(100, (i) => -random.nextDouble() * 5);
-    endTranslations = List.generate(100, (i) => random.nextDouble() * 10);
-    beginSkews = List.generate(100, (i) => -random.nextDouble() / 150);
-    endSkews = List.generate(100, (i) => random.nextDouble() / 250);
+        100, (i) => Duration(milliseconds: random.nextInt(800) + 600));
+    beginTranslations = List.generate(100, (i) => -random.nextDouble() * 4);
+    endTranslations = List.generate(100, (i) => random.nextDouble() * 8);
+    beginSkews = List.generate(100, (i) => -random.nextDouble() / 350);
+    endSkews = List.generate(100, (i) => random.nextDouble() / 500);
   }
 
   @override
@@ -80,7 +80,7 @@ class _FirstChallengeRefactorState extends State<FirstChallengeRefactor> {
                 end: endTranslations[index],
               ),
               duration: durations[index],
-              curve: Curves.linear,
+              curve: Curves.ease,
               onEnd: () {
                 setState(() {
                   double tempTrans = beginTranslations[index];
@@ -90,40 +90,46 @@ class _FirstChallengeRefactorState extends State<FirstChallengeRefactor> {
               },
               builder:
                   (BuildContext context, double transValue, Widget? child) {
-                return Transform.translate(
-                  offset: Offset(
-                    dx * transValue * distanceFromCenter / 20,
-                    dy * transValue * distanceFromCenter / 20,
-                  ),
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween<double>(
-                      begin: beginSkews[index],
-                      end: endSkews[index],
+                return Transform.rotate(
+                  angle: transValue * pi / 900,
+                  child: Transform.scale(
+                    scale: 1.0 + transValue / (distanceFromCenter + 0.1) / 1000,
+                    child: Transform.translate(
+                      offset: Offset(
+                        dx * transValue * distanceFromCenter / 20,
+                        dy * transValue * distanceFromCenter / 20,
+                      ),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween<double>(
+                          begin: beginSkews[index],
+                          end: endSkews[index],
+                        ),
+                        duration: durations[index],
+                        curve: Curves.linear,
+                        onEnd: () {
+                          setState(() {
+                            double tempSkew = beginSkews[index];
+                            beginSkews[index] = endSkews[index];
+                            endSkews[index] = tempSkew;
+                          });
+                        },
+                        builder: (BuildContext context, double skewValue,
+                            Widget? _) {
+                          return Transform(
+                            transform: Matrix4.skew(
+                              dx * skewValue * 10,
+                              dy * skewValue * 10,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2.0),
+                                color: color,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                    duration: durations[index],
-                    curve: Curves.linear,
-                    onEnd: () {
-                      setState(() {
-                        double tempSkew = beginSkews[index];
-                        beginSkews[index] = endSkews[index];
-                        endSkews[index] = tempSkew;
-                      });
-                    },
-                    builder:
-                        (BuildContext context, double skewValue, Widget? _) {
-                      return Transform(
-                        transform: Matrix4.skew(
-                          dx * skewValue * distanceFromCenter,
-                          dy * skewValue * distanceFromCenter,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.0),
-                            color: color,
-                          ),
-                        ),
-                      );
-                    },
                   ),
                 );
               },
