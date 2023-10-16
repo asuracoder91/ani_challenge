@@ -20,6 +20,7 @@ class _LastChallengeState extends State<LastChallenge>
   final PageController _pageController = PageController(
     viewportFraction: 1.0,
   );
+  final ScrollController _scrollController = ScrollController();
   int _currentPage = 0;
   bool _isDown = false;
 
@@ -33,6 +34,7 @@ class _LastChallengeState extends State<LastChallenge>
 
   void _moveDown() {
     setState(() {
+      _scrollController.jumpTo(0); // 스크롤러 초기화
       _isDown = true;
     });
   }
@@ -67,6 +69,7 @@ class _LastChallengeState extends State<LastChallenge>
   void dispose() {
     _pageController.dispose();
     _tweenController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -351,6 +354,7 @@ class _LastChallengeState extends State<LastChallenge>
               constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height - 160),
               child: SingleChildScrollView(
+                controller: _scrollController,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
