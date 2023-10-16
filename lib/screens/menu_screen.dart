@@ -1,6 +1,5 @@
 import 'package:ani_challenge/screens/card_challenge.dart';
 import 'package:ani_challenge/screens/first_challenge.dart';
-import 'package:ani_challenge/screens/first_challenge_starting.dart';
 import 'package:ani_challenge/screens/last_challenge.dart';
 import 'package:ani_challenge/screens/pomodoro.dart';
 import 'package:ani_challenge/screens/second_challenge.dart';
@@ -37,16 +36,7 @@ class MenuScreen extends StatelessWidget {
                   const FirstChallenge(),
                 );
               },
-              child: const Text('First Challenge'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _goToPage(
-                  context,
-                  const FirstChallengeStarting(),
-                );
-              },
-              child: const Text('First Challenge Starting'),
+              child: const Text('First Challenge (Explicit)'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -55,7 +45,7 @@ class MenuScreen extends StatelessWidget {
                   const FirstChallengeRefactor(),
                 );
               },
-              child: const Text('First Challenge(Refactor)'),
+              child: const Text('First Challenge(Implicit)'),
             ),
             ElevatedButton(
               onPressed: () {

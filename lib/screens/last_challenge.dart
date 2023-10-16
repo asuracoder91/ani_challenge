@@ -66,6 +66,7 @@ class _LastChallengeState extends State<LastChallenge>
   @override
   void dispose() {
     _pageController.dispose();
+    _tweenController.dispose();
     super.dispose();
   }
 
@@ -104,10 +105,6 @@ class _LastChallengeState extends State<LastChallenge>
         _setOffset(newOffset.clamp(-1.0, 1.0));
       }
       _prevScrollX = notification.metrics.pixels;
-      //Calculate the index closest to middle
-      //_focusedIndex = (_prevScrollX / (_itemWidth + _listItemPadding)).round();
-      /* widget.onPage(widget.cities
-          .elementAt(_pageController.page!.round() % widget.cities.length)); */
     }
     //Scroll Start
     else if (notification is ScrollStartNotification) {
@@ -118,7 +115,6 @@ class _LastChallengeState extends State<LastChallenge>
     return true;
   }
 
-  //Helper function, any time we change the offset, we want to rebuild the widget tree, so all the renderers get the new value.
   void _setOffset(double value) {
     setState(() {
       _normalizedOffset = value;
@@ -185,8 +181,6 @@ class _LastChallengeState extends State<LastChallenge>
                     ),
               ],
             ));
-
-        // 윗 부분 수정합시다
       },
     );
 
@@ -215,33 +209,6 @@ class _LastChallengeState extends State<LastChallenge>
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 50,
-            left: 20,
-            child: const Row(
-              children: [
-                Icon(Icons.arrow_back_ios, color: Colors.white, size: 16),
-                SizedBox(width: 2),
-                Text(
-                  "Back",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
-                ),
-              ],
-            )
-                .animate(
-                  target: _isDown ? 1 : 0,
-                )
-                .slideX(
-                  end: -1,
-                  duration: 200.ms,
-                )
-                .fadeOut(
-                  duration: 100.ms,
-                ),
           ),
           Positioned(
             top: 50,
@@ -275,6 +242,36 @@ class _LastChallengeState extends State<LastChallenge>
             ),
           ),
 
+          Positioned(
+            top: 50,
+            left: 20,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: const Row(
+                children: [
+                  Icon(Icons.arrow_back_ios, color: Colors.white, size: 16),
+                  SizedBox(width: 2),
+                  Text(
+                    "Back",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
+                ],
+              )
+                  .animate(
+                    target: _isDown ? 1 : 0,
+                  )
+                  .slideX(
+                    end: -1,
+                    duration: 200.ms,
+                  )
+                  .fadeOut(
+                    duration: 100.ms,
+                  ),
+            ),
+          ),
           // 하단 간략 정보 SnackBar
           Positioned(
             bottom: 0,
@@ -444,12 +441,12 @@ class ImageRenderer extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(child: _buildPaintImage()),
+        Positioned(child: _buildCharacter()),
       ],
     );
   }
 
-  Widget _buildPaintImage() {
+  Widget _buildCharacter() {
     double maxParallax = 30;
     double globalOffset = offset * maxParallax * 2;
     return Container(
