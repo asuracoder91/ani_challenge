@@ -2,6 +2,8 @@ import 'package:ani_challenge/screens/card_challenge.dart';
 import 'package:ani_challenge/screens/first_challenge.dart';
 import 'package:ani_challenge/screens/last_challenge.dart';
 import 'package:ani_challenge/screens/pomodoro.dart';
+import 'package:ani_challenge/screens/season2_first.dart';
+import 'package:ani_challenge/screens/season2_second.dart';
 import 'package:ani_challenge/screens/second_challenge.dart';
 import 'package:flutter/material.dart';
 
@@ -82,6 +84,24 @@ class MenuScreen extends StatelessWidget {
                 );
               },
               child: const Text('The Last Challenge'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _goToPage(
+                  context,
+                  const StwoFirst(),
+                );
+              },
+              child: const Text('2기 첫 챌린지'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _goToPage(
+                  context,
+                  const StwoSecondChallenge(),
+                );
+              },
+              child: const Text('2기 두번째 챌린지'),
             ),
           ],
         ),
