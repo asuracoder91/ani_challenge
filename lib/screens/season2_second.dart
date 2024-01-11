@@ -9,11 +9,21 @@ class StwoSecondChallenge extends StatefulWidget {
 
 class _StwoSecondChallenge extends State<StwoSecondChallenge>
     with TickerProviderStateMixin {
+  late List<Animation<Decoration>> _tileAnimations;
+  late List<Animation<Decoration>> _showTileAnimations;
   late AnimationController _controller;
-  late List<Animation> _tileAnimations;
+
   late AnimationController _secondController;
-  late List<Animation> _secondTileAnimations;
-  bool secondAnimationTrigger = false;
+
+  final BoxDecoration _redBox = BoxDecoration(
+    color: Colors.red,
+    borderRadius: BorderRadius.circular(3),
+  );
+
+  final BoxDecoration _blackBox = BoxDecoration(
+    color: Colors.red.withOpacity(0.1),
+    borderRadius: BorderRadius.circular(0),
+  );
 
   List<int> animationOrder = [
     24,
@@ -49,23 +59,34 @@ class _StwoSecondChallenge extends State<StwoSecondChallenge>
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    );
-
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.forward) {
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            _secondController.forward();
+          });
+        }
+        if (status == AnimationStatus.completed) {
+          _controller.reset();
+          _controller.forward();
+        }
+      });
     _secondController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
-    );
-
-    _tileAnimations = List.generate(25, (i) {
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _secondController.reset();
+          _controller.forward();
+        }
+      });
+    _tileAnimations = List<Animation<Decoration>>.generate(25, (i) {
       int index = animationOrder.indexOf(i);
       double start = index * (2 / 100.0);
-
       double end = start + 0.5;
-      if (i == 2) {
-        _secondController.forward();
-      }
-      return ColorTween(begin: Colors.red, end: Colors.red.withOpacity(0.1))
-          .animate(
+      return DecorationTween(
+        begin: _redBox,
+        end: _blackBox,
+      ).animate(
         CurvedAnimation(
           parent: _controller,
           curve: Interval(start, end, curve: Curves.easeOutQuart),
@@ -73,18 +94,19 @@ class _StwoSecondChallenge extends State<StwoSecondChallenge>
       );
     });
 
-    // _secondTileAnimations 구현
-
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _secondController.forward();
-      }
-    });
-
-    _secondController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.forward();
-      }
+    _showTileAnimations = List<Animation<Decoration>>.generate(25, (i) {
+      int index = animationOrder.indexOf(i);
+      double start = index * (2 / 100.0);
+      double end = start + 0.01;
+      return DecorationTween(
+        begin: _blackBox,
+        end: _redBox,
+      ).animate(
+        CurvedAnimation(
+          parent: _secondController,
+          curve: Interval(start, end, curve: Curves.linear),
+        ),
+      );
     });
 
     _controller.forward();
@@ -117,30 +139,25 @@ class _StwoSecondChallenge extends State<StwoSecondChallenge>
       body: GridView.builder(
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-        itemBuilder: (context, index) => AnimatedBuilder(
-          animation: _controller.isAnimating
-              ? _tileAnimations[index]
-              : _secondTileAnimations[index],
-          builder: (context, child) {
-            return Container(
-              margin: const EdgeInsets.all(20.0),
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: _controller.isAnimating
-                    ? _tileAnimations[index].value
-                    : _secondTileAnimations[index].value,
-              ),
-              child: Center(
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.all(20.0),
+            width: 24,
+            height: 24,
+            child: DecoratedBoxTransition(
+              decoration: _showTileAnimations[index],
+              child: DecoratedBoxTransition(
+                decoration: _tileAnimations[index],
+                child: Center(
                   child: Text(
-                '$index',
-                style: const TextStyle(color: Colors.white),
-              )),
-            );
-          },
-          child: Container(),
-        ),
+                    '$index',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
         itemCount: 25,
       ),
     );
