@@ -57,11 +57,11 @@ class _StwoSecondChallenge extends State<StwoSecondChallenge>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1200),
       vsync: this,
     )..addStatusListener((status) {
         if (status == AnimationStatus.forward) {
-          Future.delayed(const Duration(milliseconds: 1000), () {
+          Future.delayed(const Duration(milliseconds: 600), () {
             _secondController.forward();
           });
         }
@@ -71,7 +71,7 @@ class _StwoSecondChallenge extends State<StwoSecondChallenge>
         }
       });
     _secondController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
