@@ -148,12 +148,12 @@ class _StwoSecondChallenge extends State<StwoSecondChallenge>
               decoration: _showTileAnimations[index],
               child: DecoratedBoxTransition(
                 decoration: _tileAnimations[index],
-                child: Center(
-                  child: Text(
-                    '$index',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
+                child: const Center(
+                    // child: Text(
+                    //   '$index',
+                    //   style: const TextStyle(color: Colors.white),
+                    // ),
+                    ),
               ),
             ),
           );

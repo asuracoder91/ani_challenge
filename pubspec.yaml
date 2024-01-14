@@ -36,6 +36,7 @@ dependencies:
     cupertino_icons: ^1.0.2
     lottie: ^2.6.0
     flutter_animate: ^4.2.0+1
+    o3d: ^3.1.0
 
 dev_dependencies:
     flutter_test:
@@ -62,6 +63,7 @@ flutter:
         - assets/
         - assets/images/
         - assets/animations/
+        - assets/3ds/
 
     fonts:
         - family: Pretendard
