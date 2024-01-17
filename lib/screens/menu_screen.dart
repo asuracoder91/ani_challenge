@@ -3,6 +3,7 @@ import 'package:ani_challenge/screens/first_challenge.dart';
 import 'package:ani_challenge/screens/last_challenge.dart';
 import 'package:ani_challenge/screens/pomodoro.dart';
 import 'package:ani_challenge/screens/pomodoro2.dart';
+import 'package:ani_challenge/screens/season2_card_challenge.dart';
 import 'package:ani_challenge/screens/season2_final.dart';
 import 'package:ani_challenge/screens/season2_first.dart';
 import 'package:ani_challenge/screens/season2_second.dart';
@@ -113,6 +114,15 @@ class MenuScreen extends StatelessWidget {
                 );
               },
               child: const Text('2기 뽀모도로'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _goToPage(
+                  context,
+                  const StwoCardChallenge(),
+                );
+              },
+              child: const Text('2기 카드 챌린지'),
             ),
             ElevatedButton(
               onPressed: () {

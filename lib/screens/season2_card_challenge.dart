@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class CardChallenge extends StatefulWidget {
-  const CardChallenge({super.key});
+class StwoCardChallenge extends StatefulWidget {
+  const StwoCardChallenge({super.key});
 
   @override
-  State<CardChallenge> createState() => _CardChallengeState();
+  State<StwoCardChallenge> createState() => _StwoCardChallengeState();
 }
 
-class _CardChallengeState extends State<CardChallenge>
+class _StwoCardChallengeState extends State<StwoCardChallenge>
     with TickerProviderStateMixin {
   late final size = MediaQuery.of(context).size;
   String _resultText = "";
@@ -39,8 +39,8 @@ class _CardChallengeState extends State<CardChallenge>
   );
 
   late final ColorTween _colorTween = ColorTween(
-    begin: Colors.blue,
-    end: Colors.blue,
+    begin: Colors.grey.shade900,
+    end: Colors.grey.shade900,
   );
 
   late final Animation<Color?> _backgroundColorAnimation =
@@ -52,12 +52,12 @@ class _CardChallengeState extends State<CardChallenge>
   void _changeBackgroundColor() {
     double swipeRatio = _position.value / size.width;
     if (swipeRatio > 0) {
-      _colorTween.begin = Colors.blue;
+      _colorTween.begin = Colors.grey.shade900;
       _colorTween.end = Colors.green.shade400;
       _resultText = "맞췄다!";
       _colorController.value = swipeRatio * 3;
     } else {
-      _colorTween.begin = Colors.blue;
+      _colorTween.begin = Colors.grey.shade900;
       _colorTween.end = Colors.red.shade400;
       _resultText = "틀렸다ㅠㅠ";
       _colorController.value = -swipeRatio * 3;
@@ -88,7 +88,7 @@ class _CardChallengeState extends State<CardChallenge>
         curve: Curves.easeOut,
       );
     }
-    _colorTween.end = Colors.blue;
+    _colorTween.end = Colors.grey.shade900;
     _colorController.animateTo(0.0,
         duration: const Duration(milliseconds: 300)); // 애니메이션을 초기 상태로 되돌림
     _resultText = "";
@@ -114,12 +114,26 @@ class _CardChallengeState extends State<CardChallenge>
           },
           icon: const Icon(Icons.arrow_back),
         ),
-        title: const Text('Who am I?',
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            )),
+        title: const Column(
+          children: [
+            Text(
+              '얼굴 보고 판다 맞추기',
+              style: TextStyle(
+                fontSize: 26,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              '사진: 내셔널바오그래피',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white70,
+                fontWeight: FontWeight.w500,
+              ),
+            )
+          ],
+        ),
       ),
       body: AnimatedBuilder(
         animation: _position,
@@ -238,48 +252,37 @@ class _CardState extends State<Card> with SingleTickerProviderStateMixin {
 
   final _answer = [
     {
-      "title": "나루토",
-      "name": "우즈마키 나루토",
+      "name": "푸바오",
     },
     {
-      "title": "귀멸의 칼날",
-      "name": " 하시바라 이노스케",
+      "name": "아이바오",
     },
     {
-      "title": "신세기 에반게리온",
-      "name": "아이다 켄스케",
+      "name": "러바오",
     },
     {
-      "title": "짱구는 못말려",
-      "name": "이훈이",
+      "name": "후이바오",
     },
     {
-      "title": "원펀맨",
-      "name": "사이타마",
+      "name": "푸바오",
     },
     {
-      "title": "블리치",
-      "name": "쿠치키 바쿠야",
+      "name": "러바오",
     },
     {
-      "title": "블리치",
-      "name": "쿠치키 루키아",
+      "name": "아이바오",
     },
     {
-      "title": "드래곤볼",
-      "name": "피콜로",
+      "name": "루이바오",
     },
     {
-      "title": "원피스",
-      "name": "쵸파",
+      "name": "루이바오",
     },
     {
-      "title": "바람의 검심",
-      "name": "사가라 사노스케",
+      "name": "러바오",
     },
     {
-      "title": "슬램덩크",
-      "name": "불꽃남자 정대만",
+      "name": "아이바오",
     },
   ];
 
@@ -313,10 +316,6 @@ class _CardState extends State<Card> with SingleTickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "${_answer[widget.index]["title"]}",
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                              Text(
                                 "${_answer[widget.index]["name"]}",
                                 style: const TextStyle(
                                   fontSize: 28,
@@ -337,7 +336,7 @@ class _CardState extends State<Card> with SingleTickerProviderStateMixin {
                       width: size.width * 0.8,
                       height: size.height * 0.58,
                       child: Image.asset(
-                        "assets/images/${widget.index}.png",
+                        "assets/baos/${widget.index}.png",
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -357,7 +356,7 @@ class ProgressPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint backgroundPaint = Paint()
-      ..color = Colors.blue.shade700
+      ..color = Colors.white24
       ..style = PaintingStyle.fill;
 
     final Paint progressPaint = Paint()
