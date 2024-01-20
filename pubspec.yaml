@@ -17,6 +17,9 @@ dependencies:
     lottie: ^2.6.0
     o3d: ^3.1.0
     preload_page_view: ^0.2.0
+    typethis: ^0.3.0
+    vector_math: ^2.1.4
+    video_player: ^2.8.2
 
 dev_dependencies:
     flutter_lints: ^2.0.0
