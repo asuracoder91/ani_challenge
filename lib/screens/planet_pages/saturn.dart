@@ -37,7 +37,7 @@ class Saturn extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         const Text(
-          'Saturn is the sixth planet from the Sun and the second-largest in the Solar System, after Jupiter. It is a gas giant with an average radius of about nine-and-a-half times that of Earth.[26][27] It has only one-eighth the average density of Earth, but is over 95 times more massive.',
+          'Saturn is the sixth planet from the Sun and the second-largest in the Solar System, after Jupiter. It is a gas giant with an average radius of about nine-and-a-half times that of Earth. It has only one-eighth the average density of Earth, but is over 95 times more massive.',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,

@@ -1,3 +1,5 @@
+import 'package:ani_challenge/screens/planet_pages/earth.dart';
+import 'package:ani_challenge/screens/planet_pages/jupiter.dart';
 import 'package:ani_challenge/screens/planet_pages/mars.dart';
 import 'package:ani_challenge/screens/planet_pages/mercury.dart';
 import 'package:ani_challenge/screens/planet_pages/neptune.dart';
@@ -55,7 +57,7 @@ enum Planets {
     downOrbit: {'theta': -90, 'phi': 90, 'radius': 0.225},
     initFOV: "30deg",
     downFOV: "30deg",
-    detailPage: Mercury(),
+    detailPage: Earth(),
   ),
   mars(
     model: 'assets/3ds/mars.glb',
@@ -79,7 +81,7 @@ enum Planets {
     downOrbit: {'theta': -90, 'phi': 90, 'radius': 0.512},
     initFOV: "30deg",
     downFOV: "30deg",
-    detailPage: Mercury(),
+    detailPage: Jupiter(),
   ),
   saturn(
     model: 'assets/3ds/saturn.glb',
